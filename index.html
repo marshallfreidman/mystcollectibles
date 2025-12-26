@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Myst Collectibles | Premium TCG & Collectibles</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111411;
+            --bg-card: #0d120d;
+            --green-glow: #39ff14;
+            --green-primary: #2ecc71;
+            --green-dark: #1a5c32;
+            --green-muted: #1e3d2f;
+            --silver: #c0c0c0;
+            --silver-light: #e8e8e8;
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --border-subtle: rgba(57, 255, 20, 0.15);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background effect */
+        .bg-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-effects::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(57, 255, 20, 0.03) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(46, 204, 113, 0.02) 0%, transparent 50%);
+            animation: drift 20s ease-in-out infinite;
+        }
+
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-2%, 2%) rotate(1deg); }
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--green-glow);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float-up 8s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 1s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 2s; }
+        .particle:nth-child(4) { left: 50%; animation-delay: 3s; }
+        .particle:nth-child(5) { left: 70%; animation-delay: 4s; }
+        .particle:nth-child(6) { left: 80%; animation-delay: 5s; }
+        .particle:nth-child(7) { left: 90%; animation-delay: 6s; }
+
+        @keyframes float-up {
+            0% { transform: translateY(100vh); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100px); opacity: 0; }
+        }
+
+        /* Main content wrapper */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(57, 255, 20, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .logo-container {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            background: linear-gradient(180deg, var(--silver-light) 0%, var(--silver) 40%, var(--green-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 60px rgba(57, 255, 20, 0.3);
+            position: relative;
+        }
+
+        .logo::after {
+            content: 'MYST';
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(180deg, var(--silver-light) 0%, var(--silver) 40%, var(--green-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: blur(20px);
+            opacity: 0.5;
+            z-index: -1;
+        }
+
+        .logo-sub {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1rem, 3vw, 1.8rem);
+            font-weight: 400;
+            letter-spacing: 0.4em;
+            color: var(--green-primary);
+            text-transform: uppercase;
+            margin-top: -0.5rem;
+        }
+
+        .tagline {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: var(--text-secondary);
+            margin-top: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+
+        .hero-divider {
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--green-primary), transparent);
+            margin: 2rem 0;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .scroll-indicator svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--green-primary);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
+        }
+
+        /* About Section */
+        .about {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-primary) 100%);
+        }
+
+        .section-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--silver-light);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 2px;
+            background: var(--green-primary);
+            margin: 1rem auto 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--green-primary), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(57, 255, 20, 0.3);
+            box-shadow: 0 10px 40px rgba(57, 255, 20, 0.1);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 1.5rem;
+            stroke: var(--green-primary);
+            stroke-width: 1.5;
+        }
+
+        .feature-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--silver-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Links Section */
+        .links {
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .links-intro {
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .store-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .store-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .store-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .store-btn--primary {
+            background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-muted) 100%);
+            color: var(--text-primary);
+            border: 1px solid var(--green-primary);
+        }
+
+        .store-btn--primary:hover {
+            background: linear-gradient(135deg, var(--green-primary) 0%, var(--green-dark) 100%);
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .store-btn--secondary {
+            background: transparent;
+            color: var(--silver-light);
+            border: 1px solid var(--silver);
+        }
+
+        .store-btn--secondary:hover {
+            background: rgba(192, 192, 192, 0.1);
+            border-color: var(--silver-light);
+            box-shadow: 0 0 30px rgba(192, 192, 192, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border-subtle);
+            background: var(--bg-secondary);
+        }
+
+        .footer-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: var(--green-primary);
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+        }
+
+        .footer-text {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 1.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .store-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .store-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-sub {
+                letter-spacing: 0.2em;
+            }
+
+            .feature-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background effects -->
+    <div class="bg-effects">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Main content -->
+    <div class="content-wrapper">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="logo-container">
+                <h1 class="logo">MYST</h1>
+                <p class="logo-sub">Collectibles</p>
+            </div>
+            <div class="hero-divider"></div>
+            <p class="tagline">Premium TCG Singles, Sealed Product & Curated Collectibles</p>
+            
+            <div class="scroll-indicator">
+                <span>EXPLORE</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M12 5v14M19 12l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about" id="about">
+            <div class="section-container">
+                <h2 class="section-title">The Myst Standard</h2>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M21 12c0 1.66-4 6-9 6s-9-4.34-9-6 4-6 9-6 9 4.34 9 6z" stroke-linecap="round"/>
+                        </svg>
+                        <h3 class="feature-title">Collector-Grade Quality</h3>
+                        <p class="feature-text">Every card inspected and accurately graded. We photograph actual items so you know exactly what you're getting.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none">
+                            <rect x="3" y="7" width="18" height="13" rx="2" stroke-linecap="round"/>
+                            <path d="M3 10h18" stroke-linecap="round"/>
+                            <path d="M8 3v4M16 3v4" stroke-linecap="round"/>
+                        </svg>
+                        <h3 class="feature-title">Secure Shipping</h3>
+                        <p class="feature-text">Cards ship in penny sleeves and top loaders, sealed in team bags. Padded mailers and tracking on every order.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 17l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <h3 class="feature-title">Diverse Selection</h3>
+                        <p class="feature-text">From chase Pokémon cards to Yu-Gi-Oh! staples, plus unique finds and vintage collectibles. Something for every collector.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Links Section -->
+        <section class="links" id="shop">
+            <div class="section-container">
+                <h2 class="section-title">Shop With Us</h2>
+                <p class="links-intro">Find us on your preferred marketplace</p>
+                
+                <div class="store-buttons">
+                    <a href="#" class="store-btn store-btn--primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path d="M3 9h18M9 21V9"/>
+                        </svg>
+                        TCGPlayer Store
+                    </a>
+                    
+                    <a href="#" class="store-btn store-btn--secondary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M8 12h8M12 8v8"/>
+                        </svg>
+                        eBay Store
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-logo">MYST COLLECTIBLES</p>
+            <p class="footer-text">&copy; 2025 Myst Collectibles. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
